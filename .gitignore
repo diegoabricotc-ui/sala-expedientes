@@ -1,0 +1,3 @@
+casos/
+*.case.json
+.DS_Store

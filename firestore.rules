@@ -1,0 +1,16 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Solo la cuenta del dueño puede leer o escribir algo.
+    function esDueno() {
+      return request.auth != null
+        && request.auth.token.email == 'diego.abricotc@gmail.com';
+    }
+    match /casos/{caso} {
+      allow read, write: if esDueno();
+    }
+    match /usuarios/{uid}/progreso/{caso} {
+      allow read, write: if esDueno() && request.auth.uid == uid;
+    }
+  }
+}
